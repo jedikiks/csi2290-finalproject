@@ -5,5 +5,5 @@
 int
 main(){
 
-    return EXIT_SUCCESS;
+    /*is this visible?*/
 }
