@@ -1,0 +1,15 @@
+Data Mining has emerged as one of the most exciting and dynamic fields in computing
+science. The driving force for data mining is the presence of petabyte-scale online
+archives that potentially contain valuable bits of information hidden in them
+Commercial enterprises have been quick to recognize the value of this concept;
+consequently, within the span*of a few years, the software market itself for data
+mining is expected to be in excess of $10 billion. Data mining refers to a family
+of techniques used to detect interesting nuggets of relationships/knowledge in
+data. While the theoretical underpinnings of the field have been around for quite
+some time (in the form of patfern recognition, statistics, data analysis and
+machine learning), the practice and use of these techniques have been largely ad-
+hoc. With the availability of large databases to store, manage and assimilate data,
+the new thrust of data mining lies at the intersection of database systems,
+artificial intelligence and algorithms that efficiently analyze data. The
+distributed nature of several databases, their size and the high complexity of many
+techniques present interesting computational challenges.
