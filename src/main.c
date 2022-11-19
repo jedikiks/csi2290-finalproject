@@ -12,8 +12,7 @@ void traverse( struct Node* root );
 void freeList( struct Node** root );
 
 
-int
-main(){
+int main(){
 
     Node* root = malloc( sizeof( Node ) );                      // Create root node 
     if( !root ){
@@ -22,17 +21,20 @@ main(){
     }
     root->next = NULL;
 
-    FILE *text1, *text2, *text3, *text4;
+    FILE *text1, *text2, *text3, *text4; *out1, *out2, *out3, *out4;
 	
 	text1 = fopen("../assets/d1.txt", "r");
 	text2 = fopen("../assets/d2.txt", "r");
-	text2 = fopen("../assets/d3.txt", "r");
-	text2 = fopen("../assets/d4.txt", "r");
+	text3 = fopen("../assets/d3.txt", "r");
+	text4 = fopen("../assets/d4.txt", "r");
 	
-	/*must decide on how best to read and tokenize the data*/
-	while((int c = getchar())!=EOF) {
-		
-	}
+
+	out1 = fopen("../assets/outd1.txt", "w");				/*the text files for the final outputs*/
+	out2 = fopen("../assets/outd2.txt", "w");
+	out3 = fopen("../assets/outd3.txt", "w");
+	out4 = fopen("../assets/outd4.txt", "w");
+	
+	
 	
 	
 	/*copied from internet:
@@ -50,8 +52,12 @@ main(){
 	fclose(text2);
 	fclose(text3);
 	fclose(text4);
+	fclose(out1);
+	fclose(out2);
+	fclose(out3);
+	fclose(out4);
     freeList( &root );
-    return EXIT_SUCCESS;
+    return 0;
 }
 
 void insertEnd( Node** root, char *data, size_t size ){
