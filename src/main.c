@@ -54,8 +54,7 @@ main(){
     return EXIT_SUCCESS;
 }
 
-void 
-insertEnd( Node** root, char *data, size_t size ){
+void insertEnd( Node** root, char *data, size_t size ){
     Node* newNode = malloc( sizeof( Node ) );
         if( !newNode ){
             fputs( "ERROR: Could not insert node", stderr );
@@ -77,8 +76,7 @@ insertEnd( Node** root, char *data, size_t size ){
     currentNode->next = newNode;
 }
 
-void 
-traverse( struct Node* root ){
+void traverse( struct Node* root ){
     Node* currentNode = root;
     if( !currentNode ){
         currentNode = currentNode->next;
@@ -86,8 +84,7 @@ traverse( struct Node* root ){
     }
 }
 
-void 
-freeList( struct Node** root ){
+void freeList( struct Node** root ){
     Node* currentNode = *root;
                                                             // Two pointers: prevNode points to
     Node* previousNode = currentNode;                       // node to be freed && currentNode
