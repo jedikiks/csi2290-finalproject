@@ -2,33 +2,39 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct Node{
+/*typedef struct Node{
     char *data;
     struct Node* next;
 } Node;
+*/
 
-void insertEnd( struct Node** root, char *data, size_t size );
+/*void insertEnd( struct Node** root, char *data, size_t size );
 void traverse( struct Node* root );
-void freeList( struct Node** root );
+void freeList( struct Node** root );*/
 FILE *text1, *text2, *text3, *text4, *out, *out2, *out3, *out4, *stopwords, *spec;
+
+FILE *test;								/*for debugging*/
+
 int specdetected = 0;
 
 int main(){
 	specialchar1();						/*tokenizes the special characters*/
 
+	/*
     Node* root = malloc( sizeof( Node ) );                      // Create root node 
     if( !root ){
         fputs( "ERROR: Could not create root node", stderr );
         exit( EXIT_FAILURE );
     }
     root->next = NULL;
-
+	*/
 	
 	text1 = fopen("d1.txt", "r");
 	text2 = fopen("d2.txt", "r");
 	text3 = fopen("d3.txt", "r");
 	text4 = fopen("d4.txt", "r");
 	
+	test = fopen("test.txt", "w");
 
 	out = fopen("out1.txt", "w");				/*the text files for the final outputs*/
 	out2 = fopen("out2.txt", "w");
@@ -37,7 +43,7 @@ int main(){
 	
 	char readone[1500];												/*the array used to store the first text file*/
 	int i = 0;														/*each iteration of i represents a new character from the text file read*/
-	while (fgets(readone, sizeof(readone), text1) != NULL) {
+	while ((fgets(readone, sizeof(readone), text1)) != NULL) {
 		
 		specialchar2(readone[i]);
 		
@@ -70,6 +76,8 @@ int main(){
 	I would also recommend visiting this link for ideas: https://www.tutorialspoint.com/c_standard_library/string_h.htm
 	*/
 
+	fclose(test);
+	
 	fclose(text1);
 	fclose(text2);
 	fclose(text3);
@@ -79,13 +87,13 @@ int main(){
 	fclose(out3);
 	fclose(out4);
 	fclose(stopwords);
-    freeList( &root );
+    //freeList( &root );
     return 0;
 }
 
 char specialarray[47];					/*global array because i needed to use it across functions*/
 
-void specialchar1() {							/*tokenizes special characters into character array*/
+int specialchar1() {							/*tokenizes special characters into character array*/
 	spec = fopen("specialcharacters.txt", "r");
 	
 	char specialcount;
@@ -93,10 +101,12 @@ void specialchar1() {							/*tokenizes special characters into character array*
 	
 	while((fscanf(spec,"%c",&specialcount))!= EOF) {			/*creates an array populated by the 47 special characters*/
 		fscanf(spec,"%c",&specialarray[k]);
+		fprintf(test, "%c\n", specialarray[k]);
 		k++;
 	}
 	
 	fclose(spec);
+	return 0;
 	
 }
 
@@ -107,8 +117,10 @@ int specialchar2(randomarray) {						/*compares an element in the array to the 4
 			return;
 		}
 	}
+	return 0;
 }
 
+/*
 void insertEnd( Node** root, char *data, size_t size ){
     Node* newNode = malloc( sizeof( Node ) );
         if( !newNode ){
@@ -153,3 +165,4 @@ void freeList( struct Node** root ){
 
     *root = NULL;                                           // Implies list is empty
 }
+*/
