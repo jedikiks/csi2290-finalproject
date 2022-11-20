@@ -107,3 +107,70 @@ freeList( struct Node** root ){
 
     *root = NULL;                                           // Implies list is empty
 }
+
+
+
+
+
+
+
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+typedef struct Str
+{
+	char word[50];
+}Str;
+typedef struct
+{
+	Str* data;
+	int listsize;
+	int length;
+}Sqlist;
+int initSqlist(Sqlist* L, int maxsize)
+{
+	L->data = (Str*)malloc(maxsize * sizeof(Str));
+	if (L->data == NULL) 
+	{ printf("Space application failed!"); exit(0); }
+	L->listsize = maxsize;
+	L->length = 0;
+	return 1;
+}
+
+int main()
+{
+	Sqlist L;
+	initSqlist(&L, 1000);   //Initialize str, the size is 1000, used to store the segmented words
+	char f1[] = "C:\\  "; //file location (your d1-d4.txt file location 
+	char arr[1024] = { 0 };
+	FILE* fp; 
+	fp = fopen(f1, "r");
+	if (fp == NULL)  //Determine whether reading the file is successful
+	{
+		printf("file read failed");
+		return 1;
+	}
+	else
+	{
+		while (fgets(arr, 1013, fp) != NULL) //Read the content of each line in a loop, the first line of di.txt exceeds 1024bit, so it is read twice, and the others are divided once
+		{
+			char* p = " (),.;/";  //collection of delimiters
+			char buf[1024] = { 0 };
+			strcpy(buf, arr);    //Copy to the buf array and operate on the buf array
+			char* ret = NULL;
+			for (ret = strtok(buf, p); ret != NULL; ret = strtok(NULL, p))  //Use strtok for loop segmentation operation
+			{
+				strcpy(L.data[L.length].word, ret);  //Store it in the str structure
+				L.length++;
+			}
+		}
+	}
+	//test：
+	for (int i = 0; i < L.length; i++)
+	{
+		printf("%s\n", L.data[i].word);
+	}
+
+	return 0;
+}
