@@ -142,7 +142,7 @@ int main()
 {
 	Sqlist L;
 	initSqlist(&L, 1000);   //Initialize str, the size is 1000, used to store the segmented words
-	char f1[] = "C:\\  "; //file location (your d1-d4.txt file location 
+	char f1[] = "C:\Users\aaron\OneDrive\Documents\GitHub\csi2290-finalproject\Work"; //file location (your d1-d4.txt file location 
 	char arr[1024] = { 0 };
 	FILE* fp; 
 	fp = fopen(f1, "r");
