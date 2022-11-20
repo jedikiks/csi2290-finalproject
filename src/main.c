@@ -10,9 +10,11 @@ typedef struct Node{
 void insertEnd( struct Node** root, char *data, size_t size );
 void traverse( struct Node* root );
 void freeList( struct Node** root );
-
+FILE *text1, *text2, *text3, *text4, *out, *out2, *out3, *out4, *stopwords, *spec;
+int specdetected = 0;
 
 int main(){
+	specialchar1();						/*tokenizes the special characters*/
 
     Node* root = malloc( sizeof( Node ) );                      // Create root node 
     if( !root ){
@@ -21,20 +23,40 @@ int main(){
     }
     root->next = NULL;
 
-    FILE *text1, *text2, *text3, *text4; *out1, *out2, *out3, *out4;
 	
-	text1 = fopen("../assets/d1.txt", "r");
-	text2 = fopen("../assets/d2.txt", "r");
-	text3 = fopen("../assets/d3.txt", "r");
-	text4 = fopen("../assets/d4.txt", "r");
+	text1 = fopen("d1.txt", "r");
+	text2 = fopen("d2.txt", "r");
+	text3 = fopen("d3.txt", "r");
+	text4 = fopen("d4.txt", "r");
 	
 
-	out1 = fopen("../assets/outd1.txt", "w");				/*the text files for the final outputs*/
-	out2 = fopen("../assets/outd2.txt", "w");
-	out3 = fopen("../assets/outd3.txt", "w");
-	out4 = fopen("../assets/outd4.txt", "w");
+	out = fopen("out1.txt", "w");				/*the text files for the final outputs*/
+	out2 = fopen("out2.txt", "w");
+	out3 = fopen("out3.txt", "w");
+	out4 = fopen("out4.txt", "w");
 	
+	char readone[1500];												/*the array used to store the first text file*/
+	int i = 0;														/*each iteration of i represents a new character from the text file read*/
+	while (fgets(readone, sizeof(readone), text1) != NULL) {
+		
+		specialchar2(readone[i]);
+		
+		if (readone[i]!=' ' && readone[i]!='  ') {						/*if there is a space or two spaces, assume the word is over*/
+			
+			if (specdetected ==1) {												/*if there's a special character, ignore it*/
+				continue;
+			}
+			else {
+				fprintf(out,"%c",readone[i]);
+			}
+		}
+		else {
+			fprintf(out,"\n");
+		}
+		
 	
+		i++;
+	}
 	
 	
 	/*copied from internet:
@@ -52,12 +74,39 @@ int main(){
 	fclose(text2);
 	fclose(text3);
 	fclose(text4);
-	fclose(out1);
+	fclose(out);
 	fclose(out2);
 	fclose(out3);
 	fclose(out4);
+	fclose(stopwords);
     freeList( &root );
     return 0;
+}
+
+char specialarray[47];					/*global array because i needed to use it across functions*/
+
+void specialchar1() {							/*tokenizes special characters into character array*/
+	spec = fopen("specialcharacters.txt", "r");
+	
+	char specialcount;
+	int k=0;
+	
+	while((fscanf(spec,"%c",&specialcount))!= EOF) {			/*creates an array populated by the 47 special characters*/
+		fscanf(spec,"%c",&specialarray[k]);
+		k++;
+	}
+	
+	fclose(spec);
+	
+}
+
+int specialchar2(randomarray) {						/*compares an element in the array to the 47 special characters*/
+	for (int k =0; k<47; k++) {
+		if(randomarray = specialarray[k]) {
+			specdetected = 1;
+			return;
+		}
+	}
 }
 
 void insertEnd( Node** root, char *data, size_t size ){
