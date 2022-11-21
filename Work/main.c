@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
+#define ARRAYSIZE( array ) sizeof( array ) / sizeof( array[0] )
+
 typedef struct Str
 {
 	char word[50];
@@ -22,7 +25,6 @@ int initSqlist(Sqlist* L, int maxsize)
 }
 
 FILE* fp = NULL; 
-
 Sqlist L;
 
 int main()
@@ -33,11 +35,12 @@ int main()
 	char f3[] = "d3.txt"; 
 	char f4[] = "d4.txt";
 
+/*
 	printwords(f1);
 	printwords(f2);
 	printwords(f3);
 	printwords(f4);
-	
+*/	
 	//test：
 	for (int i = 0; i < L.length; i++)
 	{
@@ -45,6 +48,33 @@ int main()
 	}
 
 	return 0;
+}
+
+void
+getWords( FILE* file ){
+	 
+	char* word;
+	char string[1024];
+	char buffer[1024];
+	char stopWord[1024];
+
+	FILE* stopWordFile = fopen( "stopWords.txt", "r" );
+	fp = fopen( file, "r");
+	
+	if (fp == NULL){
+		fprintf( stderr, "Could not read from file" );
+	} else{
+		while (fgets( buffer, ARRAYSIZE( buffer ) , fp) != NULL){
+			strcpy( string, buffer ); 
+			while( !word ){											// Copy each word if
+				word = strtok( NULL, " " );								// its not a stop word 
+				if( strcmp( word, fgets( stopWord, ARRAYSIZE( stopWord ), stopWordFile ) ) != 0 ){	// into the array
+						strcpy( L.data[L.length].word, word );
+						L.length++;
+				}
+			}
+		}
+	}
 }
 
 int printwords(fileofchoice) 
