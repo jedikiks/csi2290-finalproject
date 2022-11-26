@@ -29,6 +29,8 @@ Sqlist L;
 
 void getWords( FILE* file );
 void printWords();
+void makeLowercase();
+void alphebetize();
 
 int main()
 {
@@ -54,10 +56,14 @@ int main()
 		perror( "couldnt open d4" );
 
 	getWords( d1 );
+    /*
 	getWords( d2 );
 	getWords( d3 );
 	getWords( d4 );
+    */
 	printWords();
+    makeLowercase();
+    alphebetize();
 /*
 	printwords(f1);
 	printwords(f2);
@@ -67,10 +73,53 @@ int main()
 	//test：
 	for (int i = 0; i < L.length; i++)
 	{
-		printf("%s", L.data[i].word);
+		printf("%s\n", L.data[i].word);
 	}
 
 	return 0;
+}
+
+/*for qsort() when ordering array alphabetically
+more info on: https://iq.opengenus.org/qsort-in-c/
+*/
+int
+compare(const void *a, const void *b) {
+	const Str* wordA = a;
+	const Str* wordB = b;
+	return strcmp(wordA->word, wordB->word);
+}
+
+void 
+alphebetize(){
+	//alphabetize
+	qsort(L.data, L.length, sizeof(*L.data), compare);
+
+	//test：
+    /*
+	for (int i = 0; i < L.length; i++)
+	{
+		printf("%s\n", L.data[i].word);
+	}
+    */
+}
+
+void
+makeLowercase(){
+	/*it is important to convert all characters in the words to lowercase if necessary.
+	 This will be important when computing for freq. and weight.
+	 It will also matter when checking for stop words
+	 ex:
+	 "You'll" and "you'll" should be considered the same word
+	*/
+	for (int i = 0;i < L.length;i++) {
+		for (int j = 0;j < strlen(L.data[i].word);j++) {
+			char c = L.data[i].word[j];
+			if ((c >= 'A') && (c <= 'Z')) {
+				//add 32 to ASCII value of character
+				L.data[i].word[j] = (char)((int)c + 32);
+			}
+		}
+	}
 }
 
 void
@@ -108,7 +157,7 @@ getWords( FILE* file ){
 void printWords(){
 	for( int i = 0; i < L.length; i++ )
 	{
-		char* p = " `~1!2@3#4$5%6^7&8*9(0)-_=+[{]}\\|;:',<.>/?¦©・";  //collection of delimiters
+		char* p = " `~1!2@3#4$$5%6^7&8*9()0-_=+[{]}\\|;:\',<.>/?¦©・";  //collection of delimiters
 		char buf[1024] = { 0 };
 		strcpy( buf, L.data[i].word );    //Copy to the buf array and operate on the buf array
 		char* ret = NULL;
