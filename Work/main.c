@@ -4,16 +4,26 @@
 
 #define ARRAYSIZE( array ) sizeof( array ) / sizeof( array[0] )
 
+/*
+struct Freq{
+    char word[50];
+    int numTimes;
+};
+*/
+
 typedef struct Str
 {
+    int numTimes;
 	char word[50];
 }Str;
+
 typedef struct
 {
 	Str* data;
 	int listsize;
 	int length;
 }Sqlist;
+
 int initSqlist(Sqlist* L, int maxsize)
 {
 	L->data = (Str*)malloc(maxsize * sizeof(Str));
@@ -24,13 +34,15 @@ int initSqlist(Sqlist* L, int maxsize)
 	return 1;
 }
 
-//FILE* fp = NULL; 
-Sqlist L;
-
 void getWords( FILE* file );
 void printWords();
 void makeLowercase();
 void alphebetize();
+void getFrequency();
+
+//FILE* fp = NULL; 
+Sqlist L;
+
 
 int main()
 {
@@ -64,20 +76,68 @@ int main()
 	printWords();
     makeLowercase();
     alphebetize();
+    getFrequency();
 /*
 	printwords(f1);
 	printwords(f2);
 	printwords(f3);
 	printwords(f4);
 */	
-	//test：
+	// print to stdout：
 	for (int i = 0; i < L.length; i++)
 	{
-		printf("%s\n", L.data[i].word);
+		fprintf( stdout, "word: %s, frequency: %d\n", L.data[i].word, L.data[i].numTimes );
 	}
 
 	return 0;
 }
+
+void
+printToFile( FILE* file ){
+    if( file == NULL ){
+	    fprintf( stderr, "Could not read from file" );
+    } else{
+	    for (int i = 0; i < L.length; i++)
+	    {
+	    	fprintf( file, "%s\n", L.data[i].word );
+	    }
+    }
+}
+
+void
+getFrequency(){
+	for (int i = 0; i < L.length; i++){
+        for( int j = i; j < L.length; j++ ){
+            if( strcmp( L.data[i].word, L.data[j].word ) == 0 ){
+                L.data[i].numTimes++;
+            } else{
+                break;
+            }
+        }
+    }
+}
+
+/*
+void
+getFrequency( FILE* file ){
+    struct Freq freq;
+    char buffer[1028];
+
+    if( file == NULL ){
+	    fprintf( stderr, "Could not read from file" );
+    } else{
+        char currentWord[1028];
+        fgets( buffer, 1028, currentWord );
+        freq.word = currentWord;
+
+        while( fgets( buffer, 1028, file ) != NULL ){
+            if( strcmp( buffer, currentWord ) == 0 ){
+                freq.numTimes++;
+        }
+    }
+
+}
+*/
 
 /*for qsort() when ordering array alphabetically
 more info on: https://iq.opengenus.org/qsort-in-c/
