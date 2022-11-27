@@ -13,7 +13,7 @@ struct Freq{
 
 typedef struct Str
 {
-    int numTimes;
+    double numTimes;
 	char word[50];
 }Str;
 
@@ -83,11 +83,16 @@ int main()
 	printwords(f3);
 	printwords(f4);
 */	
+
+
+    
 	// print to stdout：
+    /*
 	for (int i = 0; i < L.length; i++)
 	{
 		fprintf( stdout, "word: %s, frequency: %d\n", L.data[i].word, L.data[i].numTimes );
 	}
+    */
 
 	return 0;
 }
@@ -106,6 +111,14 @@ printToFile( FILE* file ){
 
 void
 getFrequency(){
+    char currentWord[1028]; 
+    int position = 0;
+    int maxFreq = 0;
+
+    /***********************
+     * Find the frequencies
+     *   of each element 
+     ***********************/
 	for (int i = 0; i < L.length; i++){
         for( int j = i; j < L.length; j++ ){
             if( strcmp( L.data[i].word, L.data[j].word ) == 0 ){
@@ -113,6 +126,25 @@ getFrequency(){
             } else{
                 break;
             }
+        }
+
+        if ( L.data[i].numTimes > maxFreq ){
+            maxFreq = L.data[i].numTimes;
+        }
+    }
+
+    /***********************
+     * Find the frequencies
+     *     of each word
+     ***********************/
+    strcpy( currentWord, L.data[0].word );
+    while( position < L.length ){
+        if ( strcmp( currentWord, L.data[position].word ) == 0 ){
+            position++;
+        } else{
+             //fprintf( stdout, "ith word[%d]: %s, jth word[%d]: %s\n", i, L.data[i].word, j, L.data[j].word );
+             strcpy( currentWord, L.data[position].word );
+             fprintf( stdout, "Word: %s \t\tFrequency: %f \t\tWeight: %f\n", currentWord, L.data[position].numTimes, ( L.data[position].numTimes / maxFreq ) );
         }
     }
 }
