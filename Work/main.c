@@ -4,13 +4,6 @@
 
 #define ARRAYSIZE( array ) sizeof( array ) / sizeof( array[0] )
 
-/*
-struct Freq{
-    char word[50];
-    int numTimes;
-};
-*/
-
 typedef struct Str
 {
     double numTimes;
@@ -24,6 +17,74 @@ typedef struct
 	int length;
 }Sqlist;
 
+Sqlist L;
+
+void init( FILE* file, const char* outFileName );
+int initSqlist(Sqlist* L, int maxsize);
+void getWords( FILE* file );
+void printToFile( const char* fileName );
+void parseWords();
+void makeLowercase();
+void alphebetize();
+void getFrequency();
+
+
+
+int 
+main()
+{
+	initSqlist(&L, 1000);     //Initialize str, the size is 1000, used to store the segmented words
+
+	FILE* d1 = fopen( "../assets/inputs/d1.txt", "r" );
+	if( !d1 ){
+		perror( "couldnt open d1.txt" );
+        exit( EXIT_FAILURE );
+    } else{
+        init( d1, "../assets/outputs/Tokenizedd1.txt" );
+        fclose( d1 );
+    }
+
+	FILE* d2 = fopen( "../assets/inputs/d2.txt", "r" );
+	if( !d2 ){
+		perror( "couldnt open d2.txt" );
+        exit( EXIT_FAILURE );
+    } else{
+        init( d2, "../assets/outputs/Tokenizedd2.txt" );
+        fclose( d2 );
+    }
+
+	FILE* d3 = fopen( "../assets/inputs/d3.txt", "r" );
+	if( !d3 ){
+		perror( "couldnt open d3.txt" );
+        exit( EXIT_FAILURE );
+    } else{
+        init( d3, "../assets/outputs/Tokenizedd3.txt" );
+        fclose( d3 );
+    }
+
+	FILE* d4 = fopen( "../assets/inputs/d4.txt", "r" );
+	if( !d4 ){
+		perror( "couldnt open d4.txt" );
+        exit( EXIT_FAILURE );
+    } else{
+        init( d4, "../assets/outputs/Tokenizedd4.txt" );
+        fclose( d4 );
+    }
+
+	return 0;
+}
+
+
+void
+init( FILE* file, const char* outFileName ){
+	getWords( file );
+	parseWords();
+    makeLowercase();
+    alphebetize();
+    getFrequency();
+    printToFile( outFileName );
+}
+
 int initSqlist(Sqlist* L, int maxsize)
 {
 	L->data = (Str*)malloc(maxsize * sizeof(Str));
@@ -34,71 +95,9 @@ int initSqlist(Sqlist* L, int maxsize)
 	return 1;
 }
 
-void getWords( FILE* file );
-void printWords();
-void makeLowercase();
-void alphebetize();
-void getFrequency();
-
-//FILE* fp = NULL; 
-Sqlist L;
-
-
-int main()
-{
-	initSqlist(&L, 1000);     //Initialize str, the size is 1000, used to store the segmented words
-	/*
-	char f1[] = "d1.txt"; //file location (your d1-d4.txt file location 
-	char f2[] = "d2.txt";
-	char f3[] = "d3.txt"; 
-	char f4[] = "d4.txt";
-	*/
-
-	FILE* d1 = fopen( "d1.txt", "r" );
-	if( !d1 )
-		perror( "couldnt open d1" );
-	FILE* d2 = fopen( "d2.txt", "r" );
-	if( !d2 )
-		perror( "couldnt open d2" );
-	FILE* d3 = fopen( "d3.txt", "r" );
-	if( !d3 )
-		perror( "couldnt open d3" );
-	FILE* d4 = fopen( "d4.txt", "r" );
-	if( !d4 )
-		perror( "couldnt open d4" );
-
-	getWords( d1 );
-    /*
-	getWords( d2 );
-	getWords( d3 );
-	getWords( d4 );
-    */
-	printWords();
-    makeLowercase();
-    alphebetize();
-    getFrequency();
-/*
-	printwords(f1);
-	printwords(f2);
-	printwords(f3);
-	printwords(f4);
-*/	
-
-
-    
-	// print to stdout：
-    /*
-	for (int i = 0; i < L.length; i++)
-	{
-		fprintf( stdout, "word: %s, frequency: %d\n", L.data[i].word, L.data[i].numTimes );
-	}
-    */
-
-	return 0;
-}
-
 void
-printToFile( FILE* file ){
+printToFile( const char* fileName ){
+    FILE* file = fopen( fileName, "w" );
     if( file == NULL ){
 	    fprintf( stderr, "Could not read from file" );
     } else{
@@ -133,43 +132,20 @@ getFrequency(){
         }
     }
 
-    /***********************
-     * Find the frequencies
-     *     of each word
-     ***********************/
+    /**************************************
+     * Find the frequencies and weight
+     *          of each word
+    ***************************************/
     strcpy( currentWord, L.data[0].word );
     while( position < L.length ){
         if ( strcmp( currentWord, L.data[position].word ) == 0 ){
             position++;
         } else{
-             //fprintf( stdout, "ith word[%d]: %s, jth word[%d]: %s\n", i, L.data[i].word, j, L.data[j].word );
              strcpy( currentWord, L.data[position].word );
              fprintf( stdout, "Word: %s \t\tFrequency: %f \t\tWeight: %f\n", currentWord, L.data[position].numTimes, ( L.data[position].numTimes / maxFreq ) );
         }
     }
 }
-
-/*
-void
-getFrequency( FILE* file ){
-    struct Freq freq;
-    char buffer[1028];
-
-    if( file == NULL ){
-	    fprintf( stderr, "Could not read from file" );
-    } else{
-        char currentWord[1028];
-        fgets( buffer, 1028, currentWord );
-        freq.word = currentWord;
-
-        while( fgets( buffer, 1028, file ) != NULL ){
-            if( strcmp( buffer, currentWord ) == 0 ){
-                freq.numTimes++;
-        }
-    }
-
-}
-*/
 
 /*for qsort() when ordering array alphabetically
 more info on: https://iq.opengenus.org/qsort-in-c/
@@ -222,7 +198,7 @@ getWords( FILE* file ){
 	char buffer[1024];
 	char stopWord[1024];
 
-	FILE* stopWordFile = fopen( "stopwords.txt", "r" );
+	FILE* stopWordFile = fopen( "../assets/inputs/stopwords.txt", "r" );
 	if( !stopWordFile ){
 		fprintf( stderr, "Could not open stopwords.txt\n" );
 	}
@@ -246,7 +222,7 @@ getWords( FILE* file ){
 	fclose( file );
 }
 
-void printWords(){
+void parseWords(){
 	for( int i = 0; i < L.length; i++ )
 	{
 		char* p = " `~1!2@3#4$$5%6^7&8*9()0-_=+[{]}\\|;:\',<.>/?¦©・";  //collection of delimiters
