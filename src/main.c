@@ -33,7 +33,6 @@ void getFrequency();
 int 
 main()
 {
-	initSqlist(&L, 1000);     //Initialize str, the size is 1000, used to store the segmented words
 
 	FILE* d1 = fopen( "../assets/inputs/d1.txt", "r" );
 	if( !d1 ){
@@ -41,7 +40,6 @@ main()
         exit( EXIT_FAILURE );
     } else{
         init( d1, "../assets/outputs/Tokenizedd1.txt" );
-        fclose( d1 );
     }
 
 	FILE* d2 = fopen( "../assets/inputs/d2.txt", "r" );
@@ -50,7 +48,6 @@ main()
         exit( EXIT_FAILURE );
     } else{
         init( d2, "../assets/outputs/Tokenizedd2.txt" );
-        fclose( d2 );
     }
 
 	FILE* d3 = fopen( "../assets/inputs/d3.txt", "r" );
@@ -59,7 +56,6 @@ main()
         exit( EXIT_FAILURE );
     } else{
         init( d3, "../assets/outputs/Tokenizedd3.txt" );
-        fclose( d3 );
     }
 
 	FILE* d4 = fopen( "../assets/inputs/d4.txt", "r" );
@@ -68,7 +64,6 @@ main()
         exit( EXIT_FAILURE );
     } else{
         init( d4, "../assets/outputs/Tokenizedd4.txt" );
-        fclose( d4 );
     }
 
 	return 0;
@@ -77,12 +72,19 @@ main()
 
 void
 init( FILE* file, const char* outFileName ){
+    fputs( "\n============================================================================================\n", stdout );
+    fprintf( stdout, "Current file: %s", outFileName );
+    fputs( "\n============================================================================================\n", stdout );
+
+	initSqlist(&L, 1000);     //Initialize str, the size is 1000, used to store the segmented words
 	getWords( file );
 	parseWords();
     makeLowercase();
     alphebetize();
     getFrequency();
     printToFile( outFileName );
+    fclose( file );
+    free( L.data );
 }
 
 int initSqlist(Sqlist* L, int maxsize)
